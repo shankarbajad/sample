@@ -1,0 +1,203 @@
+<!-- BEGIN CONTENT -->
+  <div class="page-content-wrapper">
+    <!-- BEGIN CONTENT BODY -->
+    <div ng-controller="OrganizationsettingsController">
+	    <div class="page-content">
+	    	<div class="box organization-box">
+	    		<div class="note note-info note-bordered"><h4><%= t('organizationsettings.title')%></h4></div>
+		  		<div class="col-md-12 ">
+		  			<button class="btn new-entry" ng-click="openModal(tab)" translate>button.new_entry</button>
+		  			<div ng-view=""></div>
+						<div class="panel with-nav-tabs panel-default time-tab">
+						  <div class="panel-heading">
+								<ul class="nav nav-tabs">
+									<li class="active"><button ng-click="selectTab('division')" data-toggle="tab" href="#tab1default" translate="organizationsettings.tabs.Division"></button></li>
+									<li><button ng-click="selectTab('department')" data-toggle="tab" href="#tab2default" translate="organizationsettings.tabs.Department"></button></li>
+									<li><button ng-click="selectTab('jobfamily')" data-toggle="tab" href="#tab3default" translate="organizationsettings.tabs.Job_Family"></button></li>
+									<li><button ng-click="selectTab('region')" data-toggle="tab" href="#tab4default" translate="organizationsettings.tabs.Region"></button></li>
+								</ul>
+							</div>
+						  <div class="panel-body">
+					    	<div class="tab-content">
+					        <div id="tab1default" class="tab-pane fade in active">
+					        	<div ng-repeat="division in divisions">
+						        	<div ng-hide="editing">
+							        	<table class="organization-table">
+							        		<tr>
+							        			<td width="40%">
+								        			<div>
+								        				{{division.name}}
+									   					</div>
+									   				</td>
+									   				<td width="60%">
+									   					<button class="btn btn-primary" ng-click="editing = true">{{'button.edit' | translate}}</button>
+									   					<button class="btn btn-danger" ng-click="deleteDivision(division)" translate="button.delete"></button>
+									   				</td>
+									   			</tr>
+									   		</table>
+									   	</div>
+									   	<form ng-show="editing" ng-submit="editing = updateDivision(division)">
+							        	<table class=" organization-table">
+							        		<tr>
+							        			<td width="40%">
+								        			<div>
+								        				<input type="text" class="form-control" ng-model="division.name" placeholder="{{ 'organizationsettings.placeholder.div_name' | translate }}" required/>
+									   					</div>
+									   				</td>
+									   				<td width="60%">
+									   					<input type="submit" class="btn btn-primary " value="{{'button.update' | translate}}" />
+									   				</td>
+									   			</tr>
+									   		</table>
+									   	</form>
+									  </div>
+						   		</div>
+						      <div id="tab2default" class="tab-pane fade">
+						      	<div ng-repeat="department in departments">
+						      		<div ng-hide="departmentediting">
+							        	<table class=" organization-table">
+							        		<tr>
+							        			<td width="20%">
+								        			<div>
+								        				{{department.name}}
+									   					</div>
+									   				</td>
+									   				<td width="20%">
+								        			<div>
+								        				{{getParentName(department.division_id)}}
+									   					</div>
+									   				</td>
+									   				<td width="60%">
+									   					<button class="btn btn-primary" ng-click="departmentediting = true">{{'button.edit' | translate}}</button>
+									   					<button class="btn btn-danger" ng-click="deleteDepartment(department)" translate="button.delete"></button>
+									   				</td>
+									   			</tr>
+									   		</table>
+									   	</div>
+									   	<form ng-show="departmentediting" ng-submit="departmentediting = updateDepartment(department)">
+							        	<table class=" organization-table">
+							        		<tr>
+							        			<td width="40%">
+								        			<div>
+								        				<input type="text" class="form-control" ng-model="department.name" placeholder="{{ 'organizationsettings.placeholder.dep_name' | translate }}" required/>
+									   					</div>
+									   				</td>
+									   				<td width="40%">
+								        			<div>
+      													<select ng-model="department.division_id" ng-selected="department.division_id" ng-options="division.id as division.name for division in divisions" class="form-control" required></select>
+									   					</div>
+									   				</td>
+									   				<td width="60%">
+									   					<input type="submit" class="btn btn-primary " value="{{'button.update' | translate}}" />
+									   				</td>
+									   			</tr>
+									   		</table>
+									   	</form>
+									  </div>				
+					    		</div>
+						      <div id="tab3default" class="tab-pane fade">
+					      	  <div ng-repeat="jobfamily in jobfamilies">
+						        	<div ng-hide="familyediting">
+							        	<table class=" organization-table">
+								        	<tr>
+							        			<td width="40%">
+								        			<div>
+								        				{{jobfamily.name}}
+									   					</div>
+									   				</td>
+									   				<td width="60%">
+									   					<button class="btn btn-primary" ng-click="familyediting = true">{{'button.edit' | translate}}</button>
+									   					<button class="btn btn-danger" ng-click="deleteJobFamily(jobfamily)" translate="button.delete"></button>
+									   				</td>
+										   		</tr>
+										   	</table>
+										  </div>
+										  <form ng-show="familyediting" ng-submit="familyediting = updateJobFamily(jobfamily)">
+							        	<table class=" organization-table">
+							        		<tr>
+							        			<td width="40%">
+								        			<div>
+								        				<input type="text" class="form-control" ng-model="jobfamily.name" placeholder="{{ 'organizationsettings.placeholder.jf_name' | translate }}" required/>
+									   					</div>
+									   				</td>
+									   				<td width="60%">
+									   					<input type="submit" class="btn btn-primary " value="{{'button.update' | translate}}" />
+									   				</td>
+									   			</tr>
+									   		</table>
+									   	</form>
+									  </div>
+						   		</div>
+						   		<div id="tab4default" class="tab-pane fade">
+					      	  <div ng-repeat="region in regions">
+						        	<div ng-hide="regionediting">
+							        	<table class=" organization-table">
+								        	<tr>
+							        			<td width="40%">
+								        			<div>
+								        				{{region.regionname}}
+									   					</div>
+									   				</td>
+									   				<td width="20%">
+								        			<div>
+								        				{{region.regioncode}}
+									   					</div>
+									   				</td>
+									   				<td width="60%">
+									   					<button class="btn btn-primary" ng-click="regionediting = true">{{'button.edit' | translate}}</button>
+									   					<button class="btn btn-danger" ng-click="deleteRegion(region)" translate="button.delete"></button>
+									   				</td>
+										   		</tr>
+										   	</table>
+										  </div>
+										  <form ng-show="regionediting" ng-submit="regionediting = updateCountry(region)" novalidate>
+										  	<div ng-if="region.regioncode == getRegionCode(region.regioncode)">
+								        	<table class="organization-table">
+								        		<tr>
+														  <td width="40%">
+									        			<div>
+									        				<select ng-model="country" ng-options="country.name for country in countries track by country.code" class="form-control" required>
+														      </select>
+										   					</div>
+										   				</td>
+										   				<td width="60%">
+										   					<input type="submit" class="btn btn-primary " value="{{'button.update' | translate}}" />
+										   				</td>
+										   			</tr>
+										   		</table>
+										   	</div>
+										  </form>
+										  <form ng-show="regionediting" name="regionUpdateForm" ng-submit="regionediting = updateRegion(region,regionUpdateForm.$valid)" novalidate>
+										  	<div ng-if="region.regioncode != getRegionCode(region.regioncode)">
+								        	<table class=" organization-table">
+								        		<tr>
+														  <td width="40%">
+									        			<div>
+									        				<input type="text" name="regionname" class="form-control" ng-model="region.regionname" placeholder="{{ 'organizationsettings.placeholder.reg_name' | translate }}" required/>
+										   					</div>
+										   				</td>
+										   				<td width="40%">
+									        			<div>
+									        				<input type="text" name="regioncode" class="form-control" ng-model="region.regioncode" ng-pattern="/^([0-9]+[A-Z]+|[A-Z]+[0-9]+)[0-9A-Z]*$/" placeholder="{{ 'organizationsettings.placeholder.reg_code' | translate }}" required/>
+									        				<p ng-show="regionUpdateForm.regioncode.$error.pattern"> * Region code should be Uppercase and Alphanumeric</p>
+										   					</div>
+										   				</td>
+										   				<td width="60%">
+										   					<input type="submit" class="btn btn-primary " value="{{'button.update' | translate}}" />
+										   				</td>
+										   			</tr>
+										   		</table>
+										   	</div>
+									   	</form>
+									  </div>
+						   		</div>
+					    	</div>
+						  </div>
+						</div>
+					</div>
+				</div>
+	    </div>
+	  </div>
+    <!-- END CONTENT BODY -->
+  </div>
+<!-- END CONTENT -->
